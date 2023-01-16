@@ -1,5 +1,5 @@
 import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor, HasManyThroughRepositoryFactory, HasManyRepositoryFactory} from '@loopback/repository';
+import {DefaultCrudRepository, repository, HasManyThroughRepositoryFactory, HasManyRepositoryFactory} from '@loopback/repository';
 import {DbDataSource} from '../datasources';
 import {Producto, ProductoRelations, Categoria, CategoriaProducto, Imagen} from '../models';
 import {CategoriaRepository} from './categoria.repository';
@@ -11,8 +11,6 @@ export class ProductoRepository extends DefaultCrudRepository<
   typeof Producto.prototype.id,
   ProductoRelations
 > {
-
-  public readonly tiene_categoria: BelongsToAccessor<Categoria, typeof Producto.prototype.id>;
 
   public readonly categorias: HasManyThroughRepositoryFactory<Categoria, typeof Categoria.prototype.id,
           CategoriaProducto,
@@ -29,7 +27,6 @@ export class ProductoRepository extends DefaultCrudRepository<
     this.registerInclusionResolver('imagenes', this.imagenes.inclusionResolver);
     this.categorias = this.createHasManyThroughRepositoryFactoryFor('categorias', categoriaRepositoryGetter, categoriaProductoRepositoryGetter,);
     this.registerInclusionResolver('categorias', this.categorias.inclusionResolver);
-    this.tiene_categoria = this.createBelongsToAccessorFor('tiene_categoria', categoriaRepositoryGetter,);
-    this.registerInclusionResolver('tiene_categoria', this.tiene_categoria.inclusionResolver);
+    
   }
 }
